@@ -1,3 +1,5 @@
 *.dSYM
 *.o
 ft_ssl
+*.vscode
+test
