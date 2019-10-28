@@ -1,12 +1,4 @@
-#include <stdio.h>
-#include <string.h>
 #include "ft_ssl.h"
-
-char *ft_md5(char* msg)
-{
-	(void)msg;
-	return "md54567890123456";
-}
 
 char *ft_sha1(char *msg)
 {
@@ -14,7 +6,7 @@ char *ft_sha1(char *msg)
 	return "sha1567890123456";
 }
 
-t_dgst parse_dgst(t_parser_state* state, int ac, char* av[])
+t_dgst_t parse_dgst(t_parser_state* state, int ac, char* av[])
 {
 	if (state->i_ac >= ac)
 		return NULL;
@@ -28,12 +20,11 @@ t_dgst parse_dgst(t_parser_state* state, int ac, char* av[])
 
 int parse_option(t_parser_state *state)
 {
-	int		i;
 	char	*flag;
 
 	if (state->i_ac >= state->ac || state->av[state->i_ac][0] != '-')
 		return 0;
-	flag = &state->av[state->i_ac];
+	flag = state->av[state->i_ac];
 	while (*(++flag))
 		if (*flag == 'r')
 			state->flag_r = 1;
@@ -51,13 +42,16 @@ int parse_option(t_parser_state *state)
 	return 1;
 }
 
-int parse_file(t_parser_state *state)
+void parse_file(t_parser_state *state)
 {
-
+	state->i_ac++;
+	printf("%s\n", state->dgst_func(""));
 }
 
 void print_hash(t_parser_state *state, char *hash)
 {
+	(void)state;
+	(void)hash;
 }
 
 void flag_s_handler(t_parser_state *state)
@@ -83,13 +77,13 @@ void flag_p_handler(t_parser_state *state)
 int main(int ac, char** av)
 {
 	t_parser_state state;
-	state.i_ac = 0;
+	state.i_ac = 1;
 	state.ac = ac;
 	state.av = av;
 
 	if (!(state.dgst_func = parse_dgst(&state, ac, av)))
 	{
-		exit("Invliad dgst\n");
+		printf("Invliad dgst\n");
 		return 0;
 	}
 	while (parse_option(&state))
@@ -99,7 +93,7 @@ int main(int ac, char** av)
 		if (state.flag_p == 1)
 			flag_p_handler(&state);
 	}
-	while (++(state.i_ac) < state.ac)
+	while (state.i_ac < state.ac)
 		parse_file(&state);
 	return 0;
 }
