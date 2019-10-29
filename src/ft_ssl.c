@@ -1,79 +1,5 @@
 #include "ft_ssl.h"
 
-char *ft_sha1(char *msg)
-{
-	(void)msg;
-	return "sha1567890123456";
-}
-
-t_dgst_t parse_dgst(t_parser_state* state, int ac, char* av[])
-{
-	if (state->i_ac >= ac)
-		return NULL;
-	else if (strcmp(av[state->i_ac], "md5") == 0 && state->i_ac++)
-		return ft_md5;
-	else if (strcmp(av[state->i_ac], "sha1") == 0 && state->i_ac++)
-		return ft_sha1;
-	else
-		return NULL;
-}
-
-int parse_option(t_parser_state *state)
-{
-	char	*flag;
-
-	if (state->i_ac >= state->ac || state->av[state->i_ac][0] != '-')
-		return 0;
-	flag = state->av[state->i_ac];
-	while (*(++flag))
-		if (*flag == 'r')
-			state->flag_r = 1;
-		else if (*flag == 'p' && state->flag_p == 0)
-		 	state->flag_p = 1; //handle stdin
-		else if (*flag == 'q')
-			state->flag_q = 1;
-		else if (*flag == 's')
-			state->flag_s = 1;
-		else
-		{
-			state->err = "Invalid Flag";
-			return 0;
-		}
-	return 1;
-}
-
-void parse_file(t_parser_state *state)
-{
-	state->i_ac++;
-	printf("%s\n", state->dgst_func(""));
-}
-
-void print_hash(t_parser_state *state, char *hash)
-{
-	(void)state;
-	(void)hash;
-}
-
-void flag_s_handler(t_parser_state *state)
-{
-	char *hash;
-
-	if (++(state->i_ac) >= state->ac)
-	{
-		printf("-s need a following string\n");
-		exit(0);
-	}
-	hash = state->dgst_func(state->av[state->ac]);
-	print_hash(state, hash);
-	//free hash
-	state->flag_s = 0;
-}
-
-void flag_p_handler(t_parser_state *state)
-{
-	state->flag_p = 2;
-}
-
 int main(int ac, char** av)
 {
 	t_parser_state state;
@@ -81,9 +7,17 @@ int main(int ac, char** av)
 	state.ac = ac;
 	state.av = av;
 
-	if (!(state.dgst_func = parse_dgst(&state, ac, av)))
+	if (ac == 1)
 	{
-		printf("Invliad dgst\n");
+		printf("usage: ft_ssl command [command opts] [command args]\n");
+		return 0;
+	}
+	else if (!(state.dgst_func = parse_dgst(&state, ac, av)))
+	{
+		printf("ft_ssl: Error: '%s' is an invalid command.\n", av[1]);
+		printf("\nStandard commands:\n");
+		printf("\nMessage Digest commands:\nmd5\nsha\n");
+		printf("\nCipher commands:\n");
 		return 0;
 	}
 	while (parse_option(&state))
