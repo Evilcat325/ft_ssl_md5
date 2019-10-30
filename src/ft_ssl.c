@@ -3,10 +3,10 @@
 int main(int ac, char** av)
 {
 	t_parser_state state;
+
 	state.i_ac = 1;
 	state.ac = ac;
 	state.av = av;
-
 	if (ac == 1)
 	{
 		printf("usage: ft_ssl command [command opts] [command args]\n");
@@ -19,6 +19,11 @@ int main(int ac, char** av)
 		printf("\nMessage Digest commands:\nmd5\nsha\n");
 		printf("\nCipher commands:\n");
 		return 0;
+	}
+	if (ac == 2)
+	{
+		state.flag_q = 1;
+		flag_p_handler(&state);
 	}
 	while (parse_option(&state))
 	{

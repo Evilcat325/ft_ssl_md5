@@ -6,7 +6,7 @@
 /*   By: seli <seli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/28 15:48:37 by seli              #+#    #+#             */
-/*   Updated: 2019/10/29 22:55:35 by seli             ###   ########.fr       */
+/*   Updated: 2019/10/29 23:34:34 by seli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void ft_md5_final(t_MD5_CTX *ctx)
 
 char *ft_md5(char* msg)
 {
-	t_MD5_CTX			ctx;
+	t_MD5_CTX	ctx;
 
 	ft_md5_init(&ctx, (uint8_t *)msg);
 	ft_md5_padding(&ctx, (uint8_t *)msg);

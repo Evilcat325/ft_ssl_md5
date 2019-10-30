@@ -6,7 +6,7 @@
 /*   By: seli <seli@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/29 21:21:37 by seli              #+#    #+#             */
-/*   Updated: 2019/10/29 23:03:56 by seli             ###   ########.fr       */
+/*   Updated: 2019/10/29 23:34:06 by seli             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,10 @@ static uint32_t ft_left_rotate(t_MD5_CTX *ctx, uint32_t round)
 
 void ft_md5_block_body(t_MD5_CTX *ctx)
 {
-	int round = 0;
+	int round = -1;
 
-	while (round < 64)
+	while (++round < 64)
 	{
-		printf("%d: %u, %u, %u, %u\n", round, ctx->a, ctx->b, ctx->c, ctx->d);
 		if (round < 16) {
 			ctx->f = (ctx->b & ctx->c) | ((~ctx->b) & ctx->d);
 			ctx->g = round;
@@ -72,13 +71,11 @@ void ft_md5_block_body(t_MD5_CTX *ctx)
 		ctx->c = ctx->b;
 		ctx->b += ft_left_rotate(ctx, round);
 		ctx->a = ctx->temp;
-		round++;
 	}
 }
 
 void ft_md5_block_init(t_MD5_CTX *ctx)
 {
-	ctx->num_block = 0;
 	ctx->a = ctx->digest[0];
 	ctx->b = ctx->digest[1];
 	ctx->c = ctx->digest[2];
