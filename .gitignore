@@ -3,3 +3,4 @@
 ft_ssl
 *.vscode
 test
+*.a
